@@ -14,6 +14,7 @@ let userSchema = new Schema({
   role: {
     type: Boolean,
     required: true,
+    default: 1,
   },
 });
 
