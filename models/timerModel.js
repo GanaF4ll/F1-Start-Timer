@@ -11,7 +11,10 @@ let timerSchema = new Schema({
     required: true,
   },
   created_at: {
-    type: date,
-    default: date.now,
+    type: Date,
+    default: Date.now,
   },
 });
+
+const Timer = mongoose.model("Timer", timerSchema);
+module.exports = Timer;
