@@ -46,15 +46,16 @@ exports.userLogin = async (req, res) => {
 exports.userDelete = async (res, req) => {
   try {
     const user = await User.findOneAndDelete({ email: req.body.email });
-    res.status(201).json({ message: `Utilisateur supprimé: ${user.email}` });
-    if (!user) {
-      res.status(500).json({ message: "utilisateur non trouvé" });
+    if (user) {
+      res.status(201);
+      res.status(201).json({ message: `Utilisateur supprimé: ${user.email}` });
+    } else {
+      res.status(500).json({ message: "L'utilisateur n'existe pas" });
       return;
     }
   } catch (error) {
+    res.status(500);
     console.log(error);
-    res
-      .status(500)
-      .json({ message: "Une erreur s'est produite lors du traitement" });
+    res.json({ message: "Une erreur s'est produite lors du traitement" });
   }
 };
