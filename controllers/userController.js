@@ -1,6 +1,5 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
-const userController = require("../controllers/userController");
 require("dotenv").config();
 
 exports.userRegister = async (req, res) => {
@@ -27,7 +26,7 @@ exports.userLogin = async (req, res) => {
       const userData = {
         id: user._id,
         email: user.email,
-        reole: "admin",
+        role: "admin",
       };
       const token = await jwt.sign(userData, process.env.JWT_KEY, {
         expiresIn: "10h",
@@ -35,6 +34,21 @@ exports.userLogin = async (req, res) => {
       res.status(200).json({ token });
     } else {
       res.status(401).json({ message: "Email ou mot de passe incorrect" });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Une erreur s'est produite lors du traitement" });
+  }
+};
+
+exports.userDelete = async (res, req) => {
+  try {
+    const user = await User.findByIdAndDelete({ id: req.body.id });
+    if (!user) {
+      res.status(500).json({ message: "utilisateur non trouvé" });
+      return;
     }
   } catch (error) {
     console.log(error);

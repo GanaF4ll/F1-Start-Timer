@@ -8,4 +8,5 @@ router.post("/user/register", userController.userRegister);
 router.post("/user/login", userController.userLogin);
 //http://localhost:3001/user/login
 
+router.delete("/user/delete/:id", userController.userDelete);
 http: module.exports = router;
