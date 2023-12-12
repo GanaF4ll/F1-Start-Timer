@@ -45,7 +45,8 @@ exports.userLogin = async (req, res) => {
 
 exports.userDelete = async (res, req) => {
   try {
-    const user = await User.findByIdAndDelete({ id: req.body.id });
+    const user = await User.findOneAndDelete({ email: req.body.email });
+    res.status(201).json({ message: `Utilisateur supprimé: ${user.email}` });
     if (!user) {
       res.status(500).json({ message: "utilisateur non trouvé" });
       return;
