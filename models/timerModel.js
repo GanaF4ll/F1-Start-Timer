@@ -10,4 +10,8 @@ let timerSchema = new Schema({
     type: Number,
     required: true,
   },
+  created_at: {
+    type: date,
+    default: date.now,
+  },
 });
