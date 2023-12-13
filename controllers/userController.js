@@ -58,3 +58,29 @@ exports.userDelete = async (req, res) => {
     });
   }
 };
+
+exports.userUpdate = async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      { email: req.body.email },
+      req.body,
+      {
+        new: true,
+      }
+    );
+
+    if (user) {
+      res.status(200).json({
+        message: `L'email de l'utilisateur a été modifié: ${user.email}`,
+      });
+    } else {
+      res.status(404).json({ message: "L'utilisateur n'existe pas" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message:
+        "Une erreur s'est produite lors de la mise à jour de l'utilisateur",
+    });
+  }
+};
