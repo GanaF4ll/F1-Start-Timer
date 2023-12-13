@@ -22,7 +22,7 @@ exports.createATimer = async (req, res) => {
 
     const newTimer = new Timer({
       user_id: req.params.user_id,
-      time: req.body.time,
+      ...req.body,
     });
 
     try {
