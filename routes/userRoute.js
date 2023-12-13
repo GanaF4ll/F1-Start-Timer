@@ -15,4 +15,7 @@ router.delete("/user/delete/:email", verifyToken, userController.userDelete);
 router.put("/user/update/:email", verifyToken, userController.userUpdate);
 // url = http://localhost:3001/user/update/:email
 
+router.patch("/user/patch/:email", verifyToken, userController.userUpdate);
+// url = http://localhost:3001/user/patch/:email
+
 module.exports = router;
