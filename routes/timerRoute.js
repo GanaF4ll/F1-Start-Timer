@@ -8,4 +8,7 @@ router.get("/:user_id/timers", timerController.listAllTimers);
 router.post("/:user_id/timers/create", timerController.createATimer);
 // url = http://localhost:3001/:user_id/timers/create
 
+router.get("/:user_id/timers/:id", timerController.listOneTimer);
+// url = http://localhost:3001/:user_id/timers/:id
+
 module.exports = router;

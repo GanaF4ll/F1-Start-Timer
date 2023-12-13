@@ -39,3 +39,17 @@ exports.createATimer = async (req, res) => {
       .json({ message: "Erreur serveur (utilisateur inexistant)." });
   }
 };
+
+exports.listOneTimer = async (req, res) => {
+  try {
+    const timer = await Timer.findById(req.params.timer_id);
+    if (!timer) {
+      res.status(404).json({ message: "Timer non trouvé" });
+      return;
+    }
+    res.status(200).json(timer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
