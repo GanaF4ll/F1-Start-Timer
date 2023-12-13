@@ -53,3 +53,18 @@ exports.listOneTimer = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
+exports.deleteATimer = async (req, res) => {
+  try {
+    const timer = await Timer.findByIdAndDelete(req.params.id);
+
+    if (timer) {
+      res.status(200).json({ message: "Timer supprimé" });
+    } else {
+      res.status(404).json({ message: "Ce timer n'existe plus" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};

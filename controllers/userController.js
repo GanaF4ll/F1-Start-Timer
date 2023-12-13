@@ -1,11 +1,17 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const bcrypt = require("bcrypt");
 
 exports.userRegister = async (req, res) => {
   try {
-    let newUser = new User(req.body);
-    let user = await newUser.save();
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const newUser = new User({
+      email: req.body.email,
+      password: hashedPassword,
+      role: req.body.role,
+    });
+    const user = await newUser.save();
     res.status(201).json({ message: `Utilisateur créé : ${user.email}` });
   } catch (error) {
     console.error(error);
@@ -19,7 +25,7 @@ exports.userLogin = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
-    if (!user || user.password !== req.body.password) {
+    if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
       res.status(401).json({ message: "Email ou mot de passe incorrect" });
       return;
     }
