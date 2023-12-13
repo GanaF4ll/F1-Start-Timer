@@ -1,5 +1,6 @@
 const Timer = require("../models/timerModel");
 const User = require("../models/userModel");
+const mongoose = require("mongoose");
 
 exports.listAllTimers = async (req, res) => {
   try {
@@ -56,7 +57,24 @@ exports.listOneTimer = async (req, res) => {
 
 exports.deleteATimer = async (req, res) => {
   try {
-    const timer = await Timer.findByIdAndDelete(req.params.id);
+    // Extraction des paramètres d'URL
+    const user_id = req.params.user_id;
+    const timer_id = req.params.id;
+
+    console.log("user_id dans la requête :", user_id);
+    console.log("timer_id dans la requête :", timer_id);
+
+    const isValidUserId = mongoose.Types.ObjectId.isValid(user_id);
+    const isValidTimerId = mongoose.Types.ObjectId.isValid(timer_id);
+
+    console.log("user_id est valide :", isValidUserId);
+    console.log("timer_id est valide :", isValidTimerId);
+
+    if (!isValidUserId || !isValidTimerId) {
+      return res.status(400).json({ message: "ID invalide" });
+    }
+
+    const timer = await Timer.findByIdAndDelete(timer_id);
 
     if (timer) {
       res.status(200).json({ message: "Timer supprimé" });
@@ -64,7 +82,6 @@ exports.deleteATimer = async (req, res) => {
       res.status(404).json({ message: "Ce timer n'existe plus" });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 };

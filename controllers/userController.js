@@ -13,6 +13,7 @@ exports.userRegister = async (req, res) => {
     });
     const user = await newUser.save();
     res.status(201).json({ message: `Utilisateur créé : ${user.email}` });
+    o;
   } catch (error) {
     console.error(error);
     res

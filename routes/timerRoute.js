@@ -11,7 +11,7 @@ router.post("/:user_id/timer", timerController.createATimer);
 router.get("/:user_id/timers/:id", timerController.listOneTimer);
 // url = http://localhost:3001/:user_id/timers/:id
 
-router.delete("/:user_id/timers/:id", timerController.deleteATimer);
-// url = http://localhost:3001/:user_id/timers/:id
+router.delete("/:user_id/timer/:id", timerController.deleteATimer);
+// url = http://localhost:3001/:user_id/timer/:id
 
 module.exports = router;
