@@ -1,14 +1,40 @@
 const Timer = require("../models/timerModel");
-// const jwt = require("jsonwebtoken");
-// require('dotenv').config();
+
+exports.listAllTimers = async (req, res) => {
+  try {
+    const timers = await Timer.find({ user_id: req.params.user_id });
+    res.status(200).json(timers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
 
 exports.createATimer = async (req, res) => {
   try {
-    let newTimer = new Timer(req.body);
-    let timer = await newTimer.save();
-    res.status(201).json({ message: `Timer crée: ${timer.time}` });
+    const user = await Timer.findById(req.params.user_id);
+
+    if (!user) {
+      res.status(404).json({ message: "Utilisateur non trouvé" });
+      return;
+    }
+
+    const newTimer = new Timer({
+      ...req.body,
+      user_id: req.params.user_id,
+    });
+
+    try {
+      const savedTimer = await newTimer.save();
+      res.status(201).json(savedTimer);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Erreur serveur (db)." });
+    }
   } catch (error) {
-    console.log(error);
-    res.status(401).json({ message: "Requete invalide" });
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Erreur serveur (utilisateur inexistant)." });
   }
 };
