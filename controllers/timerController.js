@@ -12,7 +12,7 @@ exports.listAllTimers = async (req, res) => {
 
 exports.createATimer = async (req, res) => {
   try {
-    const user = await Timer.findById(req.params.user_id);
+    const user = await User.findById(req.params.user_id);
 
     if (!user) {
       res.status(404).json({ message: "Utilisateur non trouvé" });
@@ -20,8 +20,8 @@ exports.createATimer = async (req, res) => {
     }
 
     const newTimer = new Timer({
-      ...req.body,
       user_id: req.params.user_id,
+      time: req.body.time,
     });
 
     try {
