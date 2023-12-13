@@ -1,4 +1,5 @@
 const Timer = require("../models/timerModel");
+const User = require("../models/userModel");
 
 exports.listAllTimers = async (req, res) => {
   try {
