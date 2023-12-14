@@ -14,6 +14,10 @@ app.use("/", userRoute);
 const timerRoute = require("./routes/timerRoute");
 app.use("/", timerRoute);
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger/swaggerConfig");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.listen(port, () => {
   console.log(`F1StartTimer app listening on port ${port}`);
 });
