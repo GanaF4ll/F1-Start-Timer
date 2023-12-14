@@ -14,7 +14,7 @@ const { verifyToken } = require("../middlewares/jwtMiddleware");
  *         application/json:
  *           example:
  *             email: gateau@gateau.com
- *             password: "password123"
+ *             password: "gateau"
  *             role: 1
  *     responses:
  *       201:
