@@ -86,30 +86,34 @@ exports.deleteATimer = async (req, res) => {
   }
 };
 
-exports.averageTimersTime = async (req, res) => {
+exports.avgTimer = async (req, res) => {
   try {
-    const userId = req.params.user_id;
+    const user_id = req.params.user_id;
 
-    const result = await Timer.aggregate([
-      { $match: { user_id: userId } },
-      {
-        $group: {
-          _id: null,
-          averageTime: { $avg: "$time" },
-        },
-      },
-    ]);
+    const isValidUserId = mongoose.Types.ObjectId.isValid(user_id);
+    if (!isValidUserId) {
+      return res.status(400).json({ message: "ID utilisateur invalide" });
+    }
 
-    if (result.length > 0) {
-      const averageTime = result[0].averageTime;
-      res.status(200).json({ averageTime });
-    } else {
-      res
+    const timers = await Timer.find({ user_id });
+
+    if (timers.length === 0) {
+      return res
         .status(404)
         .json({ message: "Aucun timer trouvé pour cet utilisateur" });
     }
+
+    const totalMilliseconds = timers.reduce(
+      (acc, timer) => acc + timer.time,
+      0
+    );
+    const averageTime = totalMilliseconds / timers.length;
+
+    const averageInSeconds = averageTime / 1000;
+
+    res.status(200).json({ averageTime: averageInSeconds });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 };
