@@ -68,12 +68,12 @@ exports.userDelete = async (req, res) => {
 
 exports.userUpdate = async (req, res) => {
   try {
+    const newEmail = req.body.email;
+
     const user = await User.findOneAndUpdate(
-      { email: req.body.email },
-      req.body,
-      {
-        new: true,
-      }
+      { email: req.params.email },
+      { email: newEmail },
+      { new: true }
     );
 
     if (user) {
