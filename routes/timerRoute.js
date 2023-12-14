@@ -17,4 +17,10 @@ router.delete("/:user_id/timer/:id", timerController.deleteATimer);
 router.get("/:user_id/avgtimer", timerController.avgTimer);
 // url = http://localhost:3001/:user_id/avgtimer
 
+router.get("/:user_id/best", timerController.getBestTime);
+// url = http://localhost:3001/:user_id/best
+
+router.get("/:user_id/worst", timerController.getWorstTime);
+// url = http://localhost:3001/:user_id/worst
+
 module.exports = router;
