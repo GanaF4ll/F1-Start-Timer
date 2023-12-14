@@ -109,9 +109,7 @@ exports.avgTimer = async (req, res) => {
     );
     const averageTime = totalMilliseconds / timers.length;
 
-    const averageInSeconds = averageTime / 1000;
-
-    res.status(200).json({ averageTime: averageInSeconds });
+    res.status(200).json({ averageTime });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Erreur serveur", error: error.message });
