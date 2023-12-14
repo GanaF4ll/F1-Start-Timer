@@ -85,3 +85,85 @@ exports.deleteATimer = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 };
+
+exports.avgTimer = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+
+    const isValidUserId = mongoose.Types.ObjectId.isValid(user_id);
+    if (!isValidUserId) {
+      return res.status(400).json({ message: "ID utilisateur invalide" });
+    }
+
+    const timers = await Timer.find({ user_id });
+
+    if (timers.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucun timer trouvé pour cet utilisateur" });
+    }
+
+    const totalMilliseconds = timers.reduce(
+      (acc, timer) => acc + timer.time,
+      0
+    );
+    const averageTime = totalMilliseconds / timers.length;
+
+    res.status(200).json({ averageTime });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur", error: error.message });
+  }
+};
+
+exports.getBestTime = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+
+    const isValidUserId = mongoose.Types.ObjectId.isValid(user_id);
+    if (!isValidUserId) {
+      return res.status(400).json({ message: "ID utilisateur invalide" });
+    }
+
+    const timers = await Timer.find({ user_id });
+
+    if (timers.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucun timer trouvé pour cet utilisateur" });
+    }
+
+    const minTime = Math.min(...timers.map((timer) => timer.time));
+
+    res.status(200).json({ message: `Best time: ${minTime}` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur", error: error.message });
+  }
+};
+
+exports.getWorstTime = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+
+    const isValidUserId = mongoose.Types.ObjectId.isValid(user_id);
+    if (!isValidUserId) {
+      return res.status(400).json({ message: "ID utilisateur invalide" });
+    }
+
+    const timers = await Timer.find({ user_id });
+
+    if (timers.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucun timer trouvé pour cet utilisateur" });
+    }
+
+    const maxTime = Math.max(...timers.map((timer) => timer.time));
+
+    res.status(200).json({ message: `Worst time: ${maxTime}` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur", error: error.message });
+  }
+};
