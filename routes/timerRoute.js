@@ -11,6 +11,9 @@ router.post("/:user_id/timer", timerController.createATimer);
 router.get("/:user_id/timers/:id", timerController.listOneTimer);
 // url = http://localhost:3001/:user_id/timers/:id
 
+router.get("/:user_id/avgtimer", timerController.averageTimersTime);
+// url = http://localhost:3001/:user_id/avgtimer
+
 router.delete("/:user_id/timer/:id", timerController.deleteATimer);
 // url = http://localhost:3001/:user_id/timer/:id
 

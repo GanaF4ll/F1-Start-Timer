@@ -85,3 +85,31 @@ exports.deleteATimer = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 };
+
+exports.averageTimersTime = async (req, res) => {
+  try {
+    const userId = req.params.user_id;
+
+    const result = await Timer.aggregate([
+      { $match: { user_id: userId } },
+      {
+        $group: {
+          _id: null,
+          averageTime: { $avg: "$time" },
+        },
+      },
+    ]);
+
+    if (result.length > 0) {
+      const averageTime = result[0].averageTime;
+      res.status(200).json({ averageTime });
+    } else {
+      res
+        .status(404)
+        .json({ message: "Aucun timer trouvé pour cet utilisateur" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
